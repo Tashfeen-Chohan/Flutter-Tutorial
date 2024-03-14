@@ -1,7 +1,18 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: sort_child_properties_last, use_build_context_synchronously
 
-class LoginPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_codepur/utils/routes.dart';
+
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool loginButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +30,19 @@ class LoginPage extends StatelessWidget {
               width: 200,
               height: 200,
             ),
-            const Text(
-              "Welcome to Login Page!",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            Text(
+              "Welcome $name",
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               child: Column(
                 children: [
                   TextFormField(
+                    onChanged: (value) {
+                      name = value;
+                      setState(() {});
+                    },
                     decoration: const InputDecoration(
                         hintText: "Please enter username!",
                         labelText: "Username"),
@@ -38,11 +53,21 @@ class LoginPage extends StatelessWidget {
                         hintText: "Please enter password",
                         labelText: "Password"),
                   ),
-                  const SizedBox(height: 25,),
+                  const SizedBox(
+                    height: 25,
+                  ),
                   ElevatedButton(
-                    child: const Text("Login"),
-                    onPressed: () {
-                      print("Hi");
+                    child: loginButton
+                        ? const Icon(Icons.done)
+                        : const Text("Login"),
+                    style:
+                        TextButton.styleFrom(minimumSize: const Size(100, 40)),
+                    onPressed: () async {
+                      setState(() {
+                        loginButton = true;
+                      });
+                      await Future.delayed(const Duration(seconds: 1));
+                      Navigator.pushNamed(context, MyRoutes.homeRoute);
                     },
                   )
                 ],
